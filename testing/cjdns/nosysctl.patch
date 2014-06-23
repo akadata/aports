@@ -1,0 +1,12 @@
+diff -urw cjdns-master/crypto/random/seed/LinuxRandomUuidSysctlRandomSeed.h cjdns-musl/crypto/random/seed/LinuxRandomUuidSysctlRandomSeed.h
+--- cjdns-master/crypto/random/seed/LinuxRandomUuidSysctlRandomSeed.h	2014-05-15 10:03:22.676666666 +0000
++++ cjdns-musl/crypto/random/seed/LinuxRandomUuidSysctlRandomSeed.h	2014-05-15 10:02:30.586666666 +0000
+@@ -20,7 +20,7 @@
+ #include "memory/Allocator.h"
+ #include "util/Linker.h"
+ 
+-#if defined(linux) && !defined(__ILP32__) && !defined(android)
++#if defined(linux) && !defined(__ILP32__) && !defined(android) && defined(no_musl)
+     Linker_require("crypto/random/seed/LinuxRandomUuidSysctlRandomSeed.c")
+     struct RandomSeed* LinuxRandomUuidSysctlRandomSeed_new(struct Allocator* alloc);
+     RandomSeedProvider_register(LinuxRandomUuidSysctlRandomSeed_new)

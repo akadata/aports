@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ ! -f /etc/cjdroute.conf ]; then
+   echo creating new config file
+   umask 077
+   /usr/bin/cjdroute --genconf >/etc/cjdroute.conf
+else
+   echo keeping existing config intact
+fi
+exit 0

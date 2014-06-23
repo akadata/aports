@@ -1,0 +1,42 @@
+# Contributor: stef <l0ls0fo2i@ctrlc.hu>
+# Maintainer: 
+pkgname=cjdns
+pkgver=0.1
+pkgrel=1
+pkgdesc="CJDNS mesh vpn"
+url="https://github.com/cjdelisle/cjdns/"
+arch="all"
+license="GPL3"
+depends=""
+makedepends="$depends_dev git nodejs python libsodium-dev"
+install="$pkgname.post-install"
+#subpackages="$pkgname-dev $pkgname-doc"
+source="${pkgname}-master.zip::https://github.com/cjdelisle/cjdns/archive/master.zip nosysctl.patch"
+
+_builddir="$srcdir/$pkgname-master"
+prepare() {
+	local i
+	cd "$_builddir"
+	for i in $source; do
+		case $i in
+		*.patch) msg $i; patch -p1 -i "$srcdir"/$i || return 1;;
+		esac
+	done
+}
+
+build() {
+	cd "$_builddir"
+	./do || return 1
+}
+
+package() {
+	cd "$_builddir"
+   install -Dm755 cjdroute "${pkgdir}/usr/bin/cjdroute"
+   install -Dm644 "doc/man/cjdroute.conf.5" "${pkgdir}-doc/usr/share/man/man5/cjdroute.conf.5"
+}
+md5sums="bb0a7690f1cfd5a2af376b3db2bd50c9  cjdns-master.zip
+4c4f9a8ecc7d7de6bb7adda8ab0fc655  nosysctl.patch"
+sha256sums="499c454c28945eff785b710d68bb27f0617652ecb75826515c2cf2eba5037080  cjdns-master.zip
+fbb57d1f0afeb9fa88d96290846de080d5f30fd40475b488e6d7c512b3cd96ef  nosysctl.patch"
+sha512sums="254304cdfcd66e9c9cdb4da3fec4eec7bb2a9a9871e519da825cacf55cb8e8da0eb7a57fb6f154bb7bff3e9338ad428eee81b3e06e1a0bd26642ab8f773258e8  cjdns-master.zip
+a5cd84781fee5c9b685b5512facc0230ca9141ee9f2a1c9e6db9f3365151e0e5967e8f63e3aa16a71b3367283359c25ddeee9e512b462f5e89cddc15c5c576e5  nosysctl.patch"
