@@ -1,0 +1,42 @@
+# Contributor: stef <l0ls0fo2i@ctrlc.hu>
+pkgname=jfbview
+pkgver=20140423
+pkgrel=2
+pkgdesc="Fast framebuffer PDF and image viewer"
+arch='i686 x86_64'
+url="http://seasonofcode.com/pages/jfbview.html"
+license='Apache'
+makedepends='git imlib2-dev ncurses-dev jpeg-dev openssl-dev mupdf-dev jbig2dec-dev@testing openjpeg2-dev'
+
+source="${pkgname}-${pkgver}.zip::https://github.com/jichuan89/JFBView/archive/master.zip fortify.patch"
+_builddir="$srcdir/JFBView-master"
+_gitname="jfbview"
+
+prepare() {
+	local i
+	cd "$_builddir"
+	for i in $source; do
+		case $i in
+		*.patch) msg $i; patch -p1 -i "$srcdir"/$i || return 1;;
+		esac
+	done
+}
+
+build(){
+	cd "$_builddir"
+  make
+}
+
+package(){
+	cd "$_builddir"
+  install -Dm755 "./${_gitname}" "${pkgdir}/usr/bin/${_gitname}"
+  install -Dm644 "./README" "$pkgdir/usr/share/doc/${_gitname}/README"
+  cat "./${_gitname}.1" | gzip > "./${_gitname}.1.gz"
+  install -Dm644 "./${_gitname}.1.gz" "$pkgdir/usr/share/man/man1/${_gitname}.1.gz"
+}
+md5sums="9baba54d48f79158d710f4d9f2db684b  jfbview-20140423.zip
+c0daf13bde1116ea3683bb84c08dad99  fortify.patch"
+sha256sums="0ba8561fc536aaa847b6072ce19add9d3b16f6436f735bd834fb5ddb66a1c9f6  jfbview-20140423.zip
+09fd5f2aa86d0c981b6d0f6fae0ac854bf0c7b31ccb5572d2284e7834bc5f139  fortify.patch"
+sha512sums="3c21ae012f7500484798f0fcfd45269e8da945fadcc74db4c187e48313cfd10ba1686c3f67919dc7edbccad6d6920feca18d6241f83ed58188fc14715e9da811  jfbview-20140423.zip
+7192f5737f87f408217f60eafbf2d0a865bc28ee275eece60a13b431df0c7eb5d393ddde4af7cbcb0391684830060d3d0a24a7c72923adab76e2075a303d2a72  fortify.patch"

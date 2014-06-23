@@ -1,0 +1,11 @@
+diff -urw src/JFBView-master/Makefile new/Makefile
+--- src/JFBView-master/Makefile	2014-06-22 17:47:36.480000000 +0000
++++ new/Makefile	2014-06-22 17:47:26.550000000 +0000
+@@ -1,5 +1,5 @@
+-CXXFLAGS := -Wall -O3 -std=c++11
+-LIBS := -lpthread -lncurses -lfreetype -ljbig2dec -ljpeg -lz -lopenjp2 -lmupdf -lmujs -lssl -lcrypto
++CXXFLAGS := -Wall -O3 -std=c++11 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -DFORTIFY_SOURCE 
++LIBS := -Wl,-PIE -lpthread -lncurses -lfreetype -ljbig2dec -ljpeg -lz -lopenjp2 -lmupdf -lmujs -lssl -lcrypto
+ JFBVIEW_LIBS := $(LIBS) -lImlib2
+ 
+ SRCS := $(wildcard *.cpp)
