@@ -1,6 +1,6 @@
 # Maintainer: Michael Zhou <zhoumichaely@gmail.com>
 pkgname=mupdf
-pkgver=1.0
+pkgver=1.5
 pkgrel=0
 pkgdesc="A lightweight PDF and XPS viewer"
 url="http://mupdf.com"
@@ -8,11 +8,10 @@ arch="all"
 license="GPL3+"
 depends=""
 makedepends="pkgconfig freetype-dev jpeg-dev jbig2dec-dev libx11-dev 
-		libxext-dev openjpeg-dev"
+		libxext-dev openjpeg2-dev"
 install=""
-subpackages="$pkgname-doc"
-source="http://$pkgname.googlecode.com/files/$pkgname-$pkgver-source.tar.gz
-		destdir.patch"
+subpackages="$pkgname-doc $pkgname-dev"
+source="http://$pkgname.com/downloads/$pkgname-$pkgver-source.tar.gz fmtstr.patch"
 
 _builddir="$srcdir/$pkgname-$pkgver-source"
 prepare() {
@@ -27,14 +26,26 @@ prepare() {
 
 build() {
 	cd "$_builddir"
-	make prefix=/usr || return 1
+	export CFLAGS="$CFLAGS -Wall -O3 -fPIC -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -DFORTIFY_SOURCE"
+	export LDFLAGS="$LDFLAGS -Wl,-z,norel,-PIE -fPIC"
+	make build=release prefix=/usr || return 1
 }
 
 package() {
 	cd "$_builddir"
-	make prefix=/usr DESTDIR="$pkgdir" install || return 1
+	export CFLAGS="$CFLAGS -Wall -O3 -fPIC -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -DFORTIFY_SOURCE"
+	export LDFLAGS="$LDFLAGS -Wl,-z,norel,-PIE -fPIC"
+	make build=release prefix=/usr DESTDIR="$pkgdir" install || return 1
+	install -Dm644 build/release/libmujs.a "$pkgdir"/usr/lib
 	rm -f "$pkgdir"/usr/lib/*.la
+	find "$pkgdir"/usr/include \
+	  "$pkgdir"/usr/share \
+	  "$pkgdir"/usr/lib -type f | xargs chmod -v 0644
 }
 
-md5sums="d986ab98e2b035b7abd61afc474562b3  mupdf-1.0-source.tar.gz
-50902883b1152b78bbd8223c6a1aa75e  destdir.patch"
+md5sums="89bd4ddc74c266062ebf2702741bb173  mupdf-1.5-source.tar.gz
+0dc72a9eb8e4eb8b2158f3d117ef52cb  fmtstr.patch"
+sha256sums="e41fa8951de3b44a5ec95052b8897fbcca1eb721e0fd0289862e31e2f03f846a  mupdf-1.5-source.tar.gz
+a97d1262f74999e67a5daf129203c865b88459a4f3923b60179ee7c836f7b245  fmtstr.patch"
+sha512sums="0e56aed1825aab65ff7de0c2c497fdc9b22ea841bb8ff6c558e3a2d8b0fcc5474ba2b34d190e2deeb7ee4cc3bb34ef80b05da37d0a63168bb4444e749d279791  mupdf-1.5-source.tar.gz
+6939fd55096c5e4f0ec0414e626cc202e605eedc5a032dbfe49435f1b37934fcb44c4b47306e7da4ea93f2364b2ab4cf0f7e16d1a60405e3cdf3423558f2a912  fmtstr.patch"

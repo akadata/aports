@@ -1,0 +1,12 @@
+diff -urw src/mupdf-1.5-source/source/pdf/pdf-op-run.c new/source/pdf/pdf-op-run.c
+--- src/mupdf-1.5-source/source/pdf/pdf-op-run.c	2014-06-10 15:09:28.000000000 +0000
++++ new/source/pdf/pdf-op-run.c	2014-06-23 14:15:00.690000000 +0000
+@@ -1729,7 +1729,7 @@
+ 
+ 	/* Rethrow postponed errors */
+ 	if (errmess[0])
+-		fz_throw(ctx, FZ_ERROR_GENERIC, errmess);
++		fz_throw(ctx, FZ_ERROR_GENERIC, "%s", errmess);
+ }
+ 
+ static void pdf_run_BDC(pdf_csi *csi, void *state)
