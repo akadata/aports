@@ -27,18 +27,19 @@ pkgrel=$(($_kpkgrel + $_mypkgrel))
 pkgdesc="Solaris Porting Layer"
 url="http://zfsonlinux.org"
 arch="x86 x86_64"
+#arch=
 license="GPL"
 depends=""
 depends_dev="linux-grsec-dev=$_kernelver"
 makedepends="$depends_dev perl automake autoconf libtool"
 install=""
 subpackages="$pkgname-dev $pkgname-utils"
-source="http://archive.zfsonlinux.org/downloads/zfsonlinux/spl/spl-$_realver.tar.gz
-	linux-3.12.patch
-	linux-3.13.patch
-	"
+#source="http://archive.zfsonlinux.org/downloads/zfsonlinux/spl/spl-$_realver.tar.gz
+source="${pkgname}-${_realver}.zip::https://github.com/zfsonlinux/spl/archive/master.zip pagesize.patch"
+#	linux-3.12.patch"
 
-_builddir="$srcdir"/spl-$_realver
+#_builddir="$srcdir"/spl-$_realver
+_builddir="$srcdir"/spl-master
 
 prepare() {
 	local i
@@ -86,12 +87,9 @@ utils() {
                 "$pkgdir"/lib/ || return 1
 }
 
-md5sums="f00535bf89a7fde0e08f44a14a1f1e03  spl-0.6.2.tar.gz
-e6d211f6311d8e3b86e64069242e571b  linux-3.12.patch
-748bbd0f0e402dda14549261866b2900  linux-3.13.patch"
-sha256sums="3c577c7055d6c73179726b9c8a7fd48f9122be0b345c50cd54732e801165daa4  spl-0.6.2.tar.gz
-f4f70183f8f8acacbda303709a98222af593f0f2eac893fbecf0e12d8a05bb3e  linux-3.12.patch
-0ce776e548ca153ad9423d292295becee852d08a732a203cfb091ae5f253b71c  linux-3.13.patch"
-sha512sums="a79bc730f80e08e917249a0872d1215fd8507c9fcf42a63d6abf320befadea94973df6530c110701f554005309dbbcefb4b6b17a3da38e8a70c8e1b186bae6a6  spl-0.6.2.tar.gz
-894ed56e75ed662dcdd51b900bf5407b5450c818e817560f8b135677beb03d4316564511547ee35b5106a669c3035d9e81830d26eec9f0d68f7bf5f58a05c930  linux-3.12.patch
-695fc6e1923503f5fd5235814b91faec5d31e3cf6d063718342312c14a266ad64093da6deb0ecce22fd6d379bf7fe7af1a4e11cdf78475b53fc1d7bdd966c4e6  linux-3.13.patch"
+md5sums="ded8ba209c9808ea904a2272fb6e6ffe  spl-grsec-0.6.2.zip
+9ea3945aeee7705be44839ffeb0de41f  pagesize.patch"
+sha256sums="ea0f3ffd79d01bee31394992c91d3d6af36a40588a33d90139c34dd6a1e605f6  spl-grsec-0.6.2.zip
+0e15659757b34d7d05e2842277fe4ad5647a1bb4f82b115b0e2a7a06b4e93995  pagesize.patch"
+sha512sums="89ea8bde724d324e935a87fc06bec96d15f1d52e143aa7ec87519c38b81690c65824610c853a26ddd541ad5669329dbb7f6b8516275e220973a9cbe68312f06c  spl-grsec-0.6.2.zip
+4842a1bafa761fea801372abfa3106d960be286dae98808d1d4c2526aace2241d0477408b1ec01eb4bde198311ab09a497200aef6951e730291fd784e3a75a4c  pagesize.patch"
